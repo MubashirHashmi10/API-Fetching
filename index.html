@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country Information</title>
+<style>
+    /* Styles for the search bar */
+    .search-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+    input[type=text] {
+        padding: 10px;
+        width: 50%;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+    }
+    input[type=button] {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+    }
+    input[type=button]:hover {
+        background-color: #0056b3;
+    }
+    /* Styles for country details */
+    .country-details {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .country-details p {
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search for a country">
+    <input type="button" value="Search" onclick="searchCountry()">
+</div>
+<div class="country-details" id="countryDetails"></div>
+
+<script>
+    function searchCountry() {
+        const searchInput = document.getElementById('searchInput').value;
+        fetch(`https://restcountries.com/v3.1/name/${searchInput}`)
+            .then(response => response.json())
+            .then(data => {
+                displayCountry(data[0]);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('countryDetails').innerHTML = 'Country not found.';
+            });
+    }
+
+    function displayCountry(country) {
+        const countryDetails = document.getElementById('countryDetails');
+        countryDetails.innerHTML = `
+            <h2>${country.name.common}</h2>
+            <img src="${country.flags.png}" alt="Flag of ${country.name.common}" style="max-width: 200px; height: auto;">
+            <p>Capital: ${country.capital}</p>
+            <p>Population: ${country.population}</p>
+            <p>Area: ${country.area} sq. km</p>
+            <p>Region: ${country.region}</p>
+            <p>Subregion: ${country.subregion}</p>
+            <p><b>API Fetching Assignment by Muhammad Mubashir Hashmi S/O Muhammad Ayoub</b></p>
+            
+        `;
+    }
+</script>
+</body>
+</html>
